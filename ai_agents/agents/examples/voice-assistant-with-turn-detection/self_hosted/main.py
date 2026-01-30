@@ -3,6 +3,9 @@ Self-hosted Turn Detection Server using vLLM
 
 This server provides an OpenAI-compatible API endpoint for the TEN Turn Detection model.
 It can be deployed locally or on your own infrastructure, eliminating dependency on Cerebrium.
+
+Note: This uses vLLM's OpenAI server API which is part of vLLM's public interface.
+See: https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html
 """
 
 from vllm.entrypoints.openai.api_server import run_server

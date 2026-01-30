@@ -8,7 +8,7 @@ This document helps you choose between cloud-hosted (Cerebrium) and self-hosted 
 |---------|------------|-------------------|
 | **Setup Time** | 15-30 minutes | 5 minutes |
 | **Hardware Required** | NVIDIA GPU (8GB+ VRAM) | None |
-| **Monthly Cost** | Infrastructure only* | ~$30-100** |
+| **Monthly Cost** | Infrastructure only<sup>1</sup> | ~$30-100<sup>2</sup> |
 | **Data Privacy** | Complete (local) | Sent to third party |
 | **Maintenance** | Manual updates | Automatic |
 | **Scaling** | Manual | Automatic |

@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   turn-detection:
-    image: vllm/vllm-openai:latest
+    # Pin to a specific version for reproducible deployments
+    # Update this version as needed, testing before deploying to production
+    image: vllm/vllm-openai:v0.6.2
     container_name: ten-turn-detection
     ports:
       - "8000:8000"

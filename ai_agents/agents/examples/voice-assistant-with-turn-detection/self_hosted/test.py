@@ -7,7 +7,7 @@ TTD_BASE_URL = os.getenv("TTD_BASE_URL", "http://localhost:8000/v1")
 TTD_API_KEY = os.getenv("TTD_API_KEY", "not-needed-for-local")
 
 print(f"Testing Turn Detection API at: {TTD_BASE_URL}")
-print(f"API Key: {'*' * len(TTD_API_KEY)}")
+print(f"API Key: {'***API_KEY_HIDDEN***' if TTD_API_KEY else 'None'}")
 
 # Initialize AsyncOpenAI client with self-hosted endpoint
 client = AsyncOpenAI(base_url=TTD_BASE_URL, api_key=TTD_API_KEY)

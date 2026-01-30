@@ -22,9 +22,9 @@ fi
 
 # Determine which docker compose command to use
 DOCKER_COMPOSE_CMD=""
-if command -v docker compose &> /dev/null; then
+if docker compose version &>/dev/null 2>&1; then
     DOCKER_COMPOSE_CMD="docker compose"
-elif command -v docker-compose &> /dev/null; then
+elif docker-compose version &>/dev/null 2>&1; then
     DOCKER_COMPOSE_CMD="docker-compose"
 else
     echo "❌ Error: Docker Compose is not installed."
@@ -59,13 +59,16 @@ echo ""
 max_wait=300  # 5 minutes
 elapsed=0
 while [ $elapsed -lt $max_wait ]; do
-    if $DOCKER_COMPOSE_CMD ps | grep -q "healthy"; then
+    # Check if container is healthy
+    status=$($DOCKER_COMPOSE_CMD ps turn-detection 2>/dev/null | grep "turn-detection" || echo "")
+    
+    if echo "$status" | grep -q "(healthy)"; then
         echo ""
         echo "✅ Turn Detection Server is ready!"
         break
     fi
     
-    if $DOCKER_COMPOSE_CMD ps | grep -q "unhealthy"; then
+    if echo "$status" | grep -q "(unhealthy)"; then
         echo ""
         echo "❌ Server failed health check. Check logs with:"
         echo "   $DOCKER_COMPOSE_CMD logs turn-detection"
