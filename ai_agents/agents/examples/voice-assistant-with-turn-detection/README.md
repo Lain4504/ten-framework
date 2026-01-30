@@ -1,6 +1,10 @@
 # Voice Assistant with Turn Detection
 
-A voice assistant enhanced with AI-powered turn detection using a fine-tuned LLM model deployed on Cerebrium GPUs. Unlike traditional Voice Activity Detection (VAD) which only detects when speech starts/stops, turn detection intelligently determines when a speaker has finished their conversational turn by understanding context and intent.
+A voice assistant enhanced with AI-powered turn detection using a fine-tuned LLM model. Unlike traditional Voice Activity Detection (VAD) which only detects when speech starts/stops, turn detection intelligently determines when a speaker has finished their conversational turn by understanding context and intent.
+
+The turn detection model can be deployed in two ways:
+- **☁️ Cloud Deployment** - Using Cerebrium (managed GPU hosting, zero setup)
+- **🏠 Self-Hosted** - On your own infrastructure (full control, privacy, no recurring costs)
 
 ## What is Turn Detection?
 
@@ -12,58 +16,75 @@ A voice assistant enhanced with AI-powered turn detection using a fine-tuned LLM
 
 ## Prerequisites
 
-### 1. Cerebrium Account Setup
+### Turn Detection Deployment
 
-The turn detection model requires GPU deployment on Cerebrium:
+Choose one of the following deployment options for the Turn Detection model.
 
-1. **Create Cerebrium Account**: Sign up at [Cerebrium](https://www.cerebrium.ai/)
-2. **Install Cerebrium CLI**:
-   ```bash
-   pip install cerebrium
-   ```
+**Not sure which to choose?** See [DEPLOYMENT_COMPARISON.md](DEPLOYMENT_COMPARISON.md) for a detailed comparison.
 
-3. **Login to Cerebrium**:
-   ```bash
-   cerebrium login
-   ```
+#### Option A: Self-Hosted (Recommended for Full Control)
 
-4. **Deploy the Turn Detection Model**:
-   ```bash
-   cd agents/examples/voice-assistant-with-turn-detection/cerebrium
-   cerebrium deploy
-   ```
+**Requirements:**
+- NVIDIA GPU with 8GB+ VRAM (RTX 3080, A10, or better)
+- Docker with NVIDIA Container Toolkit
+- 20GB free storage
 
-   This will:
-   - Load the `TEN-framework/TEN_Turn_Detection` model with vLLM
-   - Deploy to NVIDIA A10 GPU (2 CPU cores, 14GB memory)
-   - Create an OpenAI-compatible API endpoint
-   - Return your deployment URL and API key
+**Quick Setup:**
+```bash
+cd self_hosted
+./deploy.sh
+```
 
-5. **Get Your Credentials**:
-   After deployment, Cerebrium provides:
-   - **Base URL**: `https://api.cortex.cerebrium.ai/v4/p-xxxxx/ten-turn-detection-project/run`
-   - **API Key**: Your Cerebrium API token
+This deploys the model locally on your own hardware. See [self_hosted/README.md](self_hosted/README.md) for detailed instructions.
 
-   **Important**: The base URL must end with `/run` for OpenAI client compatibility.
+**Pros:**
+- ✅ Full control and privacy
+- ✅ No recurring cloud costs
+- ✅ Data never leaves your infrastructure
+- ✅ Predictable performance
 
-6. **Verify Your Deployment**:
-   Test that everything is working properly using the included test script:
-   ```bash
-   cd agents/examples/voice-assistant-with-turn-detection/cerebrium
+**Cons:**
+- ⚠️ Requires GPU hardware
+- ⚠️ Manual setup and maintenance
 
-   # Export your Cerebrium credentials
-   export TTD_BASE_URL="https://api.cortex.cerebrium.ai/v4/p-xxxxx/ten-turn-detection-project/run"
-   export TTD_API_KEY="your_cerebrium_api_key"
+#### Option B: Cerebrium (Cloud Hosted)
 
-   # Run the test script
-   python test.py
-   ```
+**Requirements:**
+- Cerebrium account (free tier available)
+- Internet connection
 
-   The test will verify your deployment by sending sample turn detection requests and showing response times.
+**Quick Setup:**
 
-### 2. Required Environment Variables
+**Quick Setup:**
+```bash
+# Install Cerebrium CLI
+pip install cerebrium
 
-Set these in your `.env` file:
+# Login
+cerebrium login
+
+# Deploy
+cd cerebrium
+cerebrium deploy
+```
+
+See [cerebrium/README.md](cerebrium/README.md) for detailed instructions.
+
+**Pros:**
+- ✅ Zero hardware requirements
+- ✅ Automatic scaling
+- ✅ No maintenance
+- ✅ 5-minute setup
+
+**Cons:**
+- ⚠️ Recurring cloud costs (~$0.50-1.00/hour)
+- ⚠️ Data sent to third-party service
+
+---
+
+### Required Environment Variables
+
+After deploying the turn detection model (either option), set these in your `.env` file:
 
 ```bash
 # Agora (required for audio streaming)
@@ -80,9 +101,14 @@ OPENAI_MODEL=gpt-4o-mini  # or gpt-4o, gpt-3.5-turbo
 # ElevenLabs (required for TTS)
 ELEVENLABS_TTS_KEY=your_elevenlabs_api_key_here
 
-# Turn Detection (required - from Cerebrium deployment)
-TTD_BASE_URL=https://api.cortex.cerebrium.ai/v4/p-xxxxx/ten-turn-detection-project/run
-TTD_API_KEY=your_cerebrium_api_key_here
+# Turn Detection - Choose based on your deployment:
+# For Self-Hosted:
+TTD_BASE_URL=http://localhost:8000/v1
+TTD_API_KEY=not-needed-for-local
+
+# OR for Cerebrium:
+# TTD_BASE_URL=https://api.cortex.cerebrium.ai/v4/p-xxxxx/ten-turn-detection-project/run
+# TTD_API_KEY=your_cerebrium_api_key_here
 
 # Optional
 WEATHERAPI_API_KEY=your_weather_api_key_here  # for weather tool
@@ -90,7 +116,7 @@ WEATHERAPI_API_KEY=your_weather_api_key_here  # for weather tool
 
 ## Setup and Running
 
-> **Note**: Make sure you've completed the [Cerebrium deployment](#1-cerebrium-account-setup) from the Prerequisites section before proceeding.
+> **Note**: Make sure you've completed one of the [Turn Detection deployment options](#turn-detection-deployment) before proceeding.
 
 ### 1. Install Voice Assistant Dependencies
 
