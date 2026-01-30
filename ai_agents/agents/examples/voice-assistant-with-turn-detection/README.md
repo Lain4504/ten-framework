@@ -6,6 +6,8 @@ The turn detection model can be deployed in two ways:
 - **☁️ Cloud Deployment** - Using Cerebrium (managed GPU hosting, zero setup)
 - **🏠 Self-Hosted** - On your own infrastructure (full control, privacy, no recurring costs)
 
+> **🚀 Quick Start**: See [QUICK_START.md](QUICK_START.md) for fastest path to running the voice assistant.
+
 ## What is Turn Detection?
 
 **Turn Detection** analyzes speech transcription in real-time to determine if the speaker has finished their thought (turn complete) or is pausing mid-sentence (turn incomplete). This enables:
