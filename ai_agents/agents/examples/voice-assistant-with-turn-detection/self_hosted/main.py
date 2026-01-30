@@ -5,11 +5,8 @@ This server provides an OpenAI-compatible API endpoint for the TEN Turn Detectio
 It can be deployed locally or on your own infrastructure, eliminating dependency on Cerebrium.
 """
 
-from vllm import LLM, SamplingParams
 from vllm.entrypoints.openai.api_server import run_server
-from transformers import AutoTokenizer
 import argparse
-import os
 
 
 def main():

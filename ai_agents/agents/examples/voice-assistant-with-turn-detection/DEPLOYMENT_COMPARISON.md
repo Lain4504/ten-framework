@@ -12,14 +12,14 @@ This document helps you choose between cloud-hosted (Cerebrium) and self-hosted 
 | **Data Privacy** | Complete (local) | Sent to third party |
 | **Maintenance** | Manual updates | Automatic |
 | **Scaling** | Manual | Automatic |
-| **Latency*** | 30-50ms (local) | 100-200ms (cloud) |
+| **Latency<sup>3</sup>** | 30-50ms (local) | 100-200ms (cloud) |
 | **Uptime Management** | You handle it | Cerebrium handles it |
 
-\* If you already have GPU infrastructure, only power costs apply. Otherwise, ~$50-200/month for GPU VPS.
+<sup>1</sup> If you already have GPU infrastructure, only power costs apply. Otherwise, ~$50-200/month for GPU VPS.
 
-\*\* Based on NVIDIA A10 GPU usage. Varies with actual usage and scaling.
+<sup>2</sup> Based on NVIDIA A10 GPU usage. Varies with actual usage and scaling.
 
-\*\*\* Approximate latency for turn detection inference only.
+<sup>3</sup> Approximate latency for turn detection inference only.
 
 ## Decision Guide
 

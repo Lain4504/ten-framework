@@ -56,8 +56,6 @@ This deploys the model locally on your own hardware. See [self_hosted/README.md]
 - Internet connection
 
 **Quick Setup:**
-
-**Quick Setup:**
 ```bash
 # Install Cerebrium CLI
 pip install cerebrium

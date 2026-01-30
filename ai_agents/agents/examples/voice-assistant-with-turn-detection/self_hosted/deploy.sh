@@ -20,7 +20,13 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
-if ! command -v docker compose &> /dev/null && ! command -v docker-compose &> /dev/null; then
+# Determine which docker compose command to use
+DOCKER_COMPOSE_CMD=""
+if command -v docker compose &> /dev/null; then
+    DOCKER_COMPOSE_CMD="docker compose"
+elif command -v docker-compose &> /dev/null; then
+    DOCKER_COMPOSE_CMD="docker-compose"
+else
     echo "❌ Error: Docker Compose is not installed."
     echo "   Please install Docker Compose: https://docs.docker.com/compose/install/"
     exit 1
@@ -42,7 +48,7 @@ echo "   3. Start the OpenAI-compatible API server on port 8000"
 echo ""
 
 # Start the service
-docker compose up -d
+$DOCKER_COMPOSE_CMD up -d
 
 echo ""
 echo "⏳ Waiting for server to be ready..."
@@ -53,16 +59,16 @@ echo ""
 max_wait=300  # 5 minutes
 elapsed=0
 while [ $elapsed -lt $max_wait ]; do
-    if docker compose ps | grep -q "healthy"; then
+    if $DOCKER_COMPOSE_CMD ps | grep -q "healthy"; then
         echo ""
         echo "✅ Turn Detection Server is ready!"
         break
     fi
     
-    if docker compose ps | grep -q "unhealthy"; then
+    if $DOCKER_COMPOSE_CMD ps | grep -q "unhealthy"; then
         echo ""
         echo "❌ Server failed health check. Check logs with:"
-        echo "   docker compose logs turn-detection"
+        echo "   $DOCKER_COMPOSE_CMD logs turn-detection"
         exit 1
     fi
     
@@ -74,7 +80,7 @@ done
 if [ $elapsed -ge $max_wait ]; then
     echo ""
     echo "⚠️  Server did not become healthy within ${max_wait}s"
-    echo "   Check logs with: docker compose logs turn-detection"
+    echo "   Check logs with: $DOCKER_COMPOSE_CMD logs turn-detection"
     exit 1
 fi
 
@@ -93,9 +99,9 @@ echo "  export TTD_BASE_URL=\"http://localhost:8000/v1\""
 echo "  export TTD_API_KEY=\"not-needed-for-local\""
 echo ""
 echo "Useful Commands:"
-echo "  • View logs:    docker compose logs -f turn-detection"
-echo "  • Stop server:  docker compose down"
-echo "  • Restart:      docker compose restart"
+echo "  • View logs:    $DOCKER_COMPOSE_CMD logs -f turn-detection"
+echo "  • Stop server:  $DOCKER_COMPOSE_CMD down"
+echo "  • Restart:      $DOCKER_COMPOSE_CMD restart"
 echo ""
 echo "Next Steps:"
 echo "  1. Test the deployment with: python test.py"
