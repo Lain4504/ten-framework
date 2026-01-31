@@ -39,18 +39,15 @@
             {
               "type": "extension",
               "name": "llm",
-              "addon": "openai_llm2_python",
+              "addon": "gemini_llm2_python",
               "extension_group": "chatgpt",
               "property": {
-                "base_url": "https://api.openai.com/v1",
-                "api_key": "${env:OPENAI_API_KEY}",
-                "frequency_penalty": 0.9,
-                "model": "${env:OPENAI_MODEL}",
+                "api_key": "${env:GEMINI_API_KEY}",
+                "model": "${env:GEMINI_MODEL}",
                 "max_tokens": 512,
-                "prompt": "",
-                "proxy_url": "${env:OPENAI_PROXY_URL|}",
-                "greeting": "TEN Agent connected. How can I help you today?",
-                "max_memory_length": 10
+                "temperature": 0.7,
+                "top_p": 0.7,
+                "prompt": ""
               }
             },
             {
@@ -133,6 +130,58 @@
                   "source": [
                     {
                       "extension": "stt"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "extension": "llm",
+              "cmd": [
+                {
+                  "names": [
+                    "chat_completion",
+                    "abort"
+                  ],
+                  "source": [
+                    {
+                      "extension": "main_control"
+                    }
+                  ]
+                },
+                {
+                  "names": [
+                    "tool_call"
+                  ],
+                  "dest": [
+                    {
+                      "extension": "weatherapi_tool_python"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "extension": "tts",
+              "data": [
+                {
+                  "name": "tts_text_input",
+                  "source": [
+                    {
+                      "extension": "main_control"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "extension": "message_collector",
+              "data": [
+                {
+                  "name": "message",
+                  "source": [
+                    {
+                      "extension": "main_control"
                     }
                   ]
                 }

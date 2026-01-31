@@ -1,0 +1,209 @@
+{
+  "ten": {
+    "log": {
+      "handlers": [
+        {
+          "emitter": {
+            "config": {
+              "stream": "stdout"
+            },
+            "type": "console"
+          },
+          "formatter": {
+            "colored": true,
+            "type": "plain"
+          },
+          "matchers": [
+            {
+              "level": "info"
+            }
+          ]
+        }
+      ]
+    },
+    "predefined_graphs": [
+      {
+        "auto_start": true,
+        "graph": {
+          "connections": [
+            {
+              "cmd": [
+                {
+                  "names": [
+                    "on_user_joined",
+                    "on_user_left"
+                  ],
+                  "source": [
+                    {
+                      "extension": "agora_rtc"
+                    }
+                  ]
+                },
+                {
+                  "names": [
+                    "tool_register"
+                  ],
+                  "source": [
+                    {
+                      "extension": "weatherapi_tool_python"
+                    }
+                  ]
+                }
+              ],
+              "data": [
+                {
+                  "name": "asr_result",
+                  "source": [
+                    {
+                      "extension": "stt"
+                    }
+                  ]
+                }
+              ],
+              "extension": "main_control"
+            },
+            {
+              "audio_frame": [
+                {
+                  "dest": [
+                    {
+                      "extension": "streamid_adapter"
+                    }
+                  ],
+                  "name": "pcm_frame"
+                },
+                {
+                  "name": "pcm_frame",
+                  "source": [
+                    {
+                      "extension": "tts"
+                    }
+                  ]
+                }
+              ],
+              "data": [
+                {
+                  "name": "data",
+                  "source": [
+                    {
+                      "extension": "message_collector"
+                    }
+                  ]
+                }
+              ],
+              "extension": "agora_rtc"
+            },
+            {
+              "audio_frame": [
+                {
+                  "dest": [
+                    {
+                      "extension": "stt"
+                    }
+                  ],
+                  "name": "pcm_frame"
+                }
+              ],
+              "extension": "streamid_adapter"
+            }
+          ],
+          "nodes": [
+            {
+              "addon": "agora_rtc",
+              "extension_group": "default",
+              "name": "agora_rtc",
+              "property": {
+                "app_certificate": "${env:AGORA_APP_CERTIFICATE|}",
+                "app_id": "${env:AGORA_APP_ID}",
+                "channel": "agora_b2tlpj",
+                "enable_agora_asr": false,
+                "publish_audio": true,
+                "publish_data": true,
+                "remote_stream_id": 103391,
+                "stream_id": 0,
+                "subscribe_audio": true,
+                "token": "007eJxSYJicsf4Ny/TZGpMPbz3Sar6Wp/wpl+DXW5wcTAk81nMcOqIVGCyTjRJTTIwNzZNSjE2SDA0SUyzMU42STdMsEw0MDAxM1myozWwIZGRQXRrEzMTAyMDCwMgA4jOBSWYwyQImeRgS0/OLEuOTjEpyCrIYGQxAyiGKGRkMAAEAAP//DKQkaA=="
+              },
+              "type": "extension"
+            },
+            {
+              "addon": "deepgram_asr_python",
+              "extension_group": "stt",
+              "name": "stt",
+              "property": {
+                "params": {
+                  "api_key": "${env:DEEPGRAM_API_KEY}",
+                  "language": "en-US",
+                  "model": "nova-3"
+                }
+              },
+              "type": "extension"
+            },
+            {
+              "addon": "gemini_llm2_python",
+              "extension_group": "chatgpt",
+              "name": "llm",
+              "property": {
+                "api_key": "${env:GEMINI_API_KEY}",
+                "max_tokens": 512,
+                "model": "${env:GEMINI_MODEL}",
+                "prompt": "",
+                "temperature": 0.7,
+                "top_p": 0.7
+              },
+              "type": "extension"
+            },
+            {
+              "addon": "elevenlabs_tts2_python",
+              "extension_group": "tts",
+              "name": "tts",
+              "property": {
+                "dump": false,
+                "dump_path": "./",
+                "params": {
+                  "key": "${env:ELEVENLABS_TTS_KEY}",
+                  "model_id": "eleven_multilingual_v2",
+                  "output_format": "pcm_16000",
+                  "voice_id": "pNInz6obpgDQGcFmaJgB"
+                }
+              },
+              "type": "extension"
+            },
+            {
+              "addon": "main_python",
+              "extension_group": "control",
+              "name": "main_control",
+              "property": {
+                "greeting": "TEN Agent connected. How can I help you today?"
+              },
+              "type": "extension"
+            },
+            {
+              "addon": "message_collector2",
+              "extension_group": "transcriber",
+              "name": "message_collector",
+              "property": {},
+              "type": "extension"
+            },
+            {
+              "addon": "weatherapi_tool_python",
+              "extension_group": "default",
+              "name": "weatherapi_tool_python",
+              "property": {
+                "api_key": "${env:WEATHERAPI_API_KEY|}"
+              },
+              "type": "extension"
+            },
+            {
+              "addon": "streamid_adapter",
+              "name": "streamid_adapter",
+              "property": {},
+              "type": "extension"
+            }
+          ]
+        },
+        "name": "voice_assistant"
+      }
+    ]
+  }
+}
