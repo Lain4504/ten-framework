@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  turn-detection:
+    # Pin to a specific version for reproducible deployments
+    # Update this version as needed, testing before deploying to production
+    image: vllm/vllm-openai:v0.6.2
+    container_name: ten-turn-detection
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN:-}
+    command: >
+      --model TEN-framework/TEN_Turn_Detection
+      --host 0.0.0.0
+      --port 8000
+      --trust-remote-code
+      --dtype auto
+      --gpu-memory-utilization 0.9
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
